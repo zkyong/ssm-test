@@ -1,0 +1,99 @@
+1、在Maven中Spring的基础配置
+Spring是高度模块化的，可以单独使用Spring的某个库而不需要依赖Spring的其他库。
+比如，使用Spring Context库不需要依赖Spring Persistence或者Spring MVC库。
+让我们先从最简单开始，在Maven中配置spring-context依赖：
+<properties>
+	<org.springframework.version>3.2.8.RELEASE</org.springframework.version>    
+</properties>
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-context</artifactId>
+	<version>${org.springframework.version}</version>
+	<scope>runtime</scope>
+</dependency>
+上例定义的对spring-context的依赖，spring-context实现了Spring注入容器并且依赖：
+	spring-core,
+	spring-expression,
+	spring-aop,
+	spring-beans。
+这些依赖包使容器可以支持Spring的一些核心技术：Spring核心组件,Spring EL表达式 (SpEL), 面向切面编程,JavaBean机制。
+注意，在runtime范围定义这个依赖，因此需求确定在编译期间不需要依赖相关Spring特定的API。
+在一些高级应用场景下，一些Spring依赖项可以不用配置runtime范围，但是在目前比较简单的项目场景下，不需要针对Spring编译项目去获得整个框架的全部功能。
+同样要注意的是，从Spring 3.2开始不需要定义CGLIB依赖（目前的版本是CGLIB 3.0）。
+现在使用内嵌在spring-core JAR（更多详细信息可以查看相关[JIRA]https://jira.springsource.org/browse/SPR-9669("JIRA")中的cglib包（net.sf.cglib现在使用org.springframework.cglib替代）。
+
+2、在Maven配置Spring持久化框架
+现在来看看Spring持久化框架的配置（主要是spring-orm）
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-orm</artifactId>
+	<version>${org.springframework.version}</version>
+</dependency>
+上面的配置增加了Hibernate和JPA功能支持，比如HibernateTemplate和JpaTemplate以及一些额外的持久化相关的依赖：spring-jdbc和spring-tx
+在JDBC数据访问库定义Spring JDBC支持以及JdbcTemplate，Spring-tx提供了非常灵活的事务管理抽象。
+
+3、在Maven配置Spring MVC
+要增加Spring Web和Servlet支持，需要在上面已配置的pom文件中额外增加两个依赖：
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-web</artifactId>
+	<version>${org.springframework.version}</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-webmvc</artifactId>
+	<version>${org.springframework.version}</version>
+</dependency>
+spring-web包包含Servlet和Portlet所需要通用组件，spring-webmvc则在Servlet环境中启用MVC支持。
+由于spring-webmvc依赖于spring-web，所以定义了spring-webmvc依赖后，可以不用显示的在pom定义spring-web。
+
+4、在Maven中配置Spring Test
+可以通过下面的依赖配置将Spring Test引入项目
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-test</artifactId>
+	<version>${spring.version}</version>
+	<scope>test</scope>
+</dependency>
+从Spring 3.2开始，Spring MVC Test项目已经被包含到核心的Spring Test框架中（原来是一个独立项目，项目托管在GitHub）。
+所以，从Spring 3.2开始，仅需要在依赖配置中配置spring-test依赖即可。
+注意：对于使用Spring 3.1及以下版本的应用来说，独立的spring-mvc-test依赖还是可以使用的，可以参考这里进行配置。
+但是，这个依赖已经不再Maven的中央库中，所以如果需要增加依赖需要配置自定义Maven容器。
+
+5. 使用Milestones（里程碑）版本
+Spring的最新稳定版本保存在Maven的中央库，如果项目需要使用Spring的里程碑版本，需要在pom中配置自定义容器：
+<repositories>
+	<repository>
+		<id>repository.springframework.maven.milestone</id>
+		<name>Spring Framework Maven Milestone Repository</name>
+		<url>http://repo.spring.io/milestone/</url>
+	</repository>
+</repositories>
+当容器配置完成后，项目就可以像下面示例一样定义依赖了：
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-core</artifactId>
+	<version>3.2.0.RC2</version>
+</dependency>
+
+6. 使用Snapshots（快照）版本
+与里程碑版本一样，快照版本也需要配置自定义容器位置：
+<repositories>
+	<repository>
+		<id>repository.springframework.maven.snapshot</id>
+		<name>Spring Framework Maven Snapshot Repository</name>
+		<url>http://repo.spring.io/snapshot/</url>
+	</repository>
+</repositories>
+当快照容器位置配置完成后，下面的依赖配置就可以使用了：
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-core</artifactId>
+	<version>3.3.0.BUILD-SNAPSHOT</version>
+</dependency>
+对于4.x版本也是一样的：
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-core</artifactId>
+	<version>4.0.3.BUILD-SNAPSHOT</version>
+</dependency>

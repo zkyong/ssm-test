@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<classPathEntry location="C:\Users\zkyong\.m2\repository\mysql\mysql-connector-java\5.1.30\mysql-connector-java-5.1.30.jar" />
+	<context id="context1">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			 connectionURL="jdbc:mysql://localhost:3306/wordpress" userId="wptest"
+			password="123456">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<javaModelGenerator targetPackage="com.zkyong.ssm.model"
+			targetProject="src/main/java"></javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.zkyong.ssm.mapper"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator targetPackage="com.zkyong.ssm.mapper"
+			type="XMLMAPPER" targetProject="src/main/java"></javaClientGenerator>
+		<!-- tableName="tsm%" 以_t结束的所有表 -->
+		<table tableName="%_t" modelType="flat" enableInsert="false"
+			enableCountByExample="false" enableSelectByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableUpdateByPrimaryKey="false" enableDeleteByPrimaryKey="false"
+			selectByPrimaryKeyQueryId="false" selectByExampleQueryId="false" />
+	</context>
+</generatorConfiguration>
